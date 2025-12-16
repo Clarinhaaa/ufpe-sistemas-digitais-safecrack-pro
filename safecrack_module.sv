@@ -8,7 +8,7 @@ module safecrack_fsm (
     output logic       led_g_1, // representa o 1° LED verde (output: 1 a partir do estado inicial)
     output logic       led_g_2, // representa o 2° LED verde (output: 1 quando o usuário acertar o 1° botão)
     output logic       led_g_3, // representa o 3° LED verde (output: 1 quando o usuário acertar o 2° botão)
-    output logic       led_v    // representa o LED vermelho (output: 1 quando o usuário errar o botão)
+    output logic       led_r    // representa o LED vermelho (output: 1 quando o usuário errar o botão)
 );
     // one-hot encoding
     typedef enum logic [4:0] { 
@@ -122,11 +122,11 @@ module safecrack_fsm (
     // tratamento dos outputs
     always_comb begin
         // os LEDs verdes vão gradativamente acendendo, conforme o usuário for acertando os botões
-        led_g_1 = (state == S0 || state == S1 || state == S2 || state == UNLOCKED);
-        led_g_2 = (state == S1 || state == S2 || state == UNLOCKED);
-        led_g_3 = (state == S2 || state == UNLOCKED);
+        led_g_1 = (state != ERROR);
+        led_g_2 = (state != ERROR & state != S0);
+        led_g_3 = (state == S2 | state == UNLOCKED);
         // caso ele erre, apenas o LED vermelho ficará aceso
-        led_v   = (state == ERROR);
+        led_r   = (state == ERROR);
     end
 
 endmodule
