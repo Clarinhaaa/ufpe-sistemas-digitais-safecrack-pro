@@ -121,11 +121,9 @@ module safecrack_fsm (
 
     // tratamento dos outputs
     always_comb begin
-        // os LEDs verdes vão gradativamente acendendo, conforme o usuário for acertando os botões
-        led_g_1 = (state != ERROR);
-        led_g_2 = (state != ERROR & state != S0);
-        led_g_3 = (state == S2 | state == UNLOCKED);
-        // caso ele erre, apenas o LED vermelho ficará aceso
+        led_g_1 = (state == S0 || state == UNLOCKED);
+        led_g_2 = (state == S1 || state == UNLOCKED);
+        led_g_3 = (state == S2 || state == UNLOCKED);
         led_r   = (state == ERROR);
     end
 
